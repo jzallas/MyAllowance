@@ -5,7 +5,13 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.Calendar;
+
+import allowance.fps.com.myallowance.model.Transaction;
+
 public class MainActivity extends AppCompatActivity {
+
+  FinanceManager mFinanceManager = null;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
