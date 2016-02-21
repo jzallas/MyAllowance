@@ -6,9 +6,9 @@ import android.preference.PreferenceManager;
 
 public class AllowanceWallet {
 
-  private static final double ALLOWED_TOTAL = 250.0;
+  protected static final double ALLOWED_TOTAL = 250.0;
 
-  private static final String KEY_REMAINING_ALLOWANCE = "PREF_REMAINING_ALLOWANCE";
+  protected static final String KEY_REMAINING_ALLOWANCE = "PREF_REMAINING_ALLOWANCE";
 
   private Double mRemaining = null;
 

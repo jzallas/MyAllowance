@@ -1,8 +1,11 @@
 package allowance.fps.com.myallowance;
 
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.test.AndroidTestCase;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import allowance.fps.com.myallowance.database.AllowanceDbHelper;
@@ -23,6 +26,7 @@ public class FinanceManagerTest extends AndroidTestCase {
 
   public void tearDown() throws Exception {
     AllowanceDbHelper.deleteAll(getContext());
+    PreferenceManager.getDefaultSharedPreferences(getContext()).edit().clear().commit();
   }
 
   public void testGetSavedTotal() throws Exception {
@@ -124,4 +128,74 @@ public class FinanceManagerTest extends AndroidTestCase {
     final double expectedRemaining = initialExpectedRemaining - newTxValue;
     assertEquals(expectedRemaining, mFinanceManager.getRemaining());
   }
+
+
+  public void testLoadingFromPreferences(){
+
+    final Double expectedSaved = 363.32;
+    final Double expectedRemaining = 23.11;
+
+    // fill shared prefs with junk
+    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+    preferences.edit()
+        .putLong(FinanceManager.KEY_START_DATE, mToday.getTime().getTime())
+        .putString(SavingManager.KEY_TOTAL_SAVED, expectedSaved.toString())
+        .putString(AllowanceWallet.KEY_REMAINING_ALLOWANCE, expectedRemaining.toString())
+        .commit();
+
+    // reset FinanceManager
+    mFinanceManager = new FinanceManager(getContext());
+
+    assertEquals(expectedRemaining, mFinanceManager.getRemaining());
+    assertEquals(expectedSaved, mFinanceManager.getSavedTotal());
+    assertEquals(mToday, mFinanceManager.getStartDate());
+
+  }
+
+  public void testSavingToPreferences(){
+    final double txValue = 2.46;
+    Transaction tx = new Transaction("title", "desc", txValue, mToday.getTime());
+
+    mFinanceManager.performTransaction(tx);
+
+    // changing the date should update saved total
+    Calendar twoWeeksLater = (Calendar) mToday.clone();
+    twoWeeksLater.add(Calendar.DAY_OF_YEAR, 14);
+
+    mFinanceManager.setStartDate(twoWeeksLater);
+
+    // add another transaction
+    final double newTxValue = 2.76;
+    Transaction tx2 = new Transaction("title2", "desc2", newTxValue, mToday.getTime());
+    mFinanceManager.performTransaction(tx2);
+
+    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+
+    // check to make sure start date was saved
+    Long time = preferences.getLong(FinanceManager.KEY_START_DATE, -1);
+    assertTrue(time > 0);
+
+    // check to make sure start date is correct
+    Calendar calendar = Calendar.getInstance();
+    calendar.setTime(new Date(time));
+    assertEquals(twoWeeksLater, calendar);
+
+    // check to make sure total was saved
+    String saved = preferences.getString(SavingManager.KEY_TOTAL_SAVED, null);
+    assertNotNull(saved);
+
+    // check to make sure saved total is correct
+    final double expectedSaved = AllowanceWallet.ALLOWED_TOTAL - txValue;
+    assertEquals(expectedSaved, Double.parseDouble(saved));
+
+    // check to make sure allowance was saved
+    String remaining = preferences.getString(AllowanceWallet.KEY_REMAINING_ALLOWANCE, null);
+    assertNotNull(remaining);
+
+    // check to make sure allowance is correct
+    final double expectedRemaining = AllowanceWallet.ALLOWED_TOTAL - newTxValue;
+    assertEquals(expectedRemaining, Double.parseDouble(remaining));
+  }
+
+
 }

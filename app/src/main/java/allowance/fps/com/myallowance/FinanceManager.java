@@ -13,7 +13,7 @@ import allowance.fps.com.myallowance.model.Transaction;
 
 public class FinanceManager {
 
-  private static final String KEY_START_DATE = "PREF_START_DATE";
+  protected static final String KEY_START_DATE = "PREF_START_DATE";
 
   private SavingManager mSavingManager;
 

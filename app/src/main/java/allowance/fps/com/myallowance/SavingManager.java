@@ -8,7 +8,7 @@ public class SavingManager {
 
   private Double mTotalSaved = null;
 
-  private static final String KEY_TOTAL_SAVED = "PREF_TOTAL_SAVED";
+  protected static final String KEY_TOTAL_SAVED = "PREF_TOTAL_SAVED";
 
   private final Context mAppContext;
 
