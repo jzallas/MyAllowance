@@ -219,5 +219,88 @@ public class FinanceManagerTest extends AndroidTestCase {
     assertEquals(newExpectedStartDate, mFinanceManager.getStartDate());
   }
 
+  public void testFailure() throws Exception {
+    // manual teardown because setUp doesn't cover this case
+    tearDown();
+
+    mFinanceManager = new FinanceManager(getContext());
+
+    // get remaining
+    boolean exceptionThrown = false;
+
+    try {
+      mFinanceManager.getRemaining();
+    } catch (Exception e){
+      exceptionThrown = true;
+    }
+
+    assertTrue(exceptionThrown);
+
+    exceptionThrown = false;
+
+    // get recent
+    try {
+      mFinanceManager.getRecentTransactions();
+    } catch (Exception e){
+      exceptionThrown = true;
+    }
+
+    assertTrue(exceptionThrown);
+
+    // get savedtotal
+    exceptionThrown = false;
+
+    try {
+      mFinanceManager.getSavedTotal();
+    } catch (Exception e){
+      exceptionThrown = true;
+    }
+
+    assertTrue(exceptionThrown);
+
+    // get allowed
+    exceptionThrown = false;
+
+    try {
+      mFinanceManager.getAllowed();
+    } catch (Exception e){
+      exceptionThrown = true;
+    }
+
+    assertTrue(exceptionThrown);
+
+    // add
+    exceptionThrown = false;
+
+    try {
+      mFinanceManager.performTransaction(null);
+    } catch (Exception e){
+      exceptionThrown = true;
+    }
+
+    assertTrue(exceptionThrown);
+
+    // edit
+    exceptionThrown = false;
+
+    try {
+      mFinanceManager.editTransaction(null, null);
+    } catch (Exception e){
+      exceptionThrown = true;
+    }
+
+    assertTrue(exceptionThrown);
+
+    // delete
+    exceptionThrown = false;
+
+    try {
+      mFinanceManager.removeTransaction(null);
+    } catch (Exception e){
+      exceptionThrown = true;
+    }
+
+    assertTrue(exceptionThrown);
+  }
 
 }
