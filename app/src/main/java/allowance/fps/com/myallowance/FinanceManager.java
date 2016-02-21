@@ -29,6 +29,7 @@ public class FinanceManager {
     mAppContext = context.getApplicationContext();
     mDbHelper = new AllowanceDbHelper(mAppContext);
     mSavingManager = new SavingManager(mAppContext);
+    mCurrentAllowance = mSavingManager.getAllowanceWallet();
   }
 
   public double getSavedTotal() {

@@ -14,9 +14,17 @@ public class AllowanceWallet {
 
   private Context mAppContext;
 
-  public AllowanceWallet(Context context) {
+  public static AllowanceWallet create(Context context){
+    return new AllowanceWallet(context);
+  }
+
+  public static AllowanceWallet exchange(AllowanceWallet allowanceWallet){
+    allowanceWallet.mRemaining = ALLOWED_TOTAL;
+    return allowanceWallet;
+  }
+
+  private AllowanceWallet(Context context) {
     mAppContext = context.getApplicationContext();
-    setRemainingAmount(ALLOWED_TOTAL);
   }
 
   public Double getTotalAllowedAmount() {
