@@ -140,7 +140,11 @@ public class AllowanceDbHelper extends SQLiteOpenHelper {
     }
   }
 
-  public void deleteAll() {
+  public static void deleteAll(Context context){
+    new AllowanceDbHelper(context).deleteAll();
+  }
+
+  private void deleteAll() {
     getWritableDatabase().delete(TABLE_TRANSACTIONS, null, null);
   }
 }

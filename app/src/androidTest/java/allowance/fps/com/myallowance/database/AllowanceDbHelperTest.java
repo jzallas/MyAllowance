@@ -23,11 +23,11 @@ public class AllowanceDbHelperTest extends AndroidTestCase {
 
   public void setUp() throws Exception {
     mAllowanceDbHelper = new AllowanceDbHelper(getContext());
-    mAllowanceDbHelper.deleteAll();
+    AllowanceDbHelper.deleteAll(getContext());
   }
 
   public void tearDown() throws Exception {
-    mAllowanceDbHelper.deleteAll();
+    AllowanceDbHelper.deleteAll(getContext());
     mAllowanceDbHelper.closeDB();
   }
 
