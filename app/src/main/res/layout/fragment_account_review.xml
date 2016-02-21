@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#f7f3f3">
+
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+        <TextView
+                android:text="Feburary 1, 2015"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:textSize="22sp"
+                android:gravity="center"/>
+        <TextView
+                android:text="Budget week ends on Feb 14, 2015"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:gravity="center"/>
+
+        <LinearLayout
+                android:id="@+id/progress_split"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:background="@android:color/white"
+                android:orientation="horizontal">
+
+            <TextView
+                    android:id="@+id/account_review_start"
+                    android:text="0"
+                    android:padding="16dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="wrap_content"
+                    android:textSize="18sp"
+                    android:layout_height="wrap_content"/>
+
+            <ProgressBar
+                    android:id="@+id/progressBar"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="48dp"
+                    android:minHeight="48dp"
+                    android:maxHeight="48dp"
+                    android:padding="16dp"
+                    android:progress="50"/>
+
+            <TextView
+                    android:id="@+id/account_review_goal"
+                    android:text="250"
+                    android:padding="16dp"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="18sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+                android:id="@+id/account_review_overall_container"
+                android:layout_width="match_parent"
+                android:orientation="vertical"
+                android:layout_marginTop="20dp"
+                android:background="@android:color/white"
+                android:layout_height="wrap_content">
+
+
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                <TextView
+                        style="@style/TextAppearance.AppCompat.Body2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:layout_gravity="center_vertical"
+                        android:text="Expected Spending"/>
+
+                <View android:layout_width="0dp"
+                      android:layout_height="1dp"
+                      android:layout_weight="1"
+                      android:background="#d2d2d2"
+                      android:layout_gravity="center"/>
+
+                <TextView
+                        android:id="@+id/account_review_expended_spending_value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:padding="16dp"
+                        android:layout_gravity="center_vertical"
+                        android:text="$300"/>
+            </LinearLayout>
+
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                <TextView
+                        style="@style/TextAppearance.AppCompat.Body2"
+                        android:id="@+id/account_review_actual_spending_value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:layout_gravity="center_vertical"
+                        android:text="Actual Spending"/>
+
+                <View android:layout_width="0dp"
+                      android:layout_height="1dp"
+                      android:layout_weight="1"
+                      android:background="#d2d2d2"
+                      android:layout_gravity="center"/>
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:padding="16dp"
+                        android:layout_gravity="center_vertical"
+                        android:text="$250"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+                android:id="@+id/account_review_recent_spending"
+                android:layout_width="match_parent"
+                android:orientation="vertical"
+                android:layout_height="wrap_content"
+                android:background="@android:color/holo_red_light"/>
+
+    </LinearLayout>
+
+    <android.support.design.widget.FloatingActionButton
+            android:id="@+id/add_transaction_fab"
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:layout_margin="16dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            app:backgroundTint="@android:color/holo_green_light"
+            android:src="@drawable/ic_add_white_48dp"
+            app:fabSize="normal"/>
+
+</RelativeLayout>
