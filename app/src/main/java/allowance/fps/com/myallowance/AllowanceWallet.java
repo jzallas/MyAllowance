@@ -39,10 +39,12 @@ public class AllowanceWallet {
   }
 
   public void withdraw(Double value) {
-    mRemaining -= value;
+    Double newRemaining = getRemainingAmount() - value;
+    setRemainingAmount(newRemaining);
   }
 
   public void deposit(Double value) {
-    mRemaining += value;
+    Double newRemaining = getRemainingAmount() + value;
+    setRemainingAmount(newRemaining);
   }
 }
