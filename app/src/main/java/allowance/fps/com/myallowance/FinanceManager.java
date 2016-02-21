@@ -28,7 +28,7 @@ public class FinanceManager {
   public FinanceManager(Context context) {
     mAppContext = context.getApplicationContext();
     mDbHelper = new AllowanceDbHelper(mAppContext);
-    mSavingManager = new SavingManager();
+    mSavingManager = new SavingManager(mAppContext);
   }
 
   public double getSavedTotal() {
@@ -36,7 +36,8 @@ public class FinanceManager {
   }
 
   public void setStartDate(Calendar startDate) {
-    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mAppContext);
+    SharedPreferences sharedPreferences = PreferenceManager
+        .getDefaultSharedPreferences(mAppContext);
     sharedPreferences.edit().putLong(KEY_START_DATE, startDate.getTime().getTime()).apply();
     mStartDate = startDate;
 
