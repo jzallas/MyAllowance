@@ -24,7 +24,12 @@ public class FinanceManager {
   final Context mAppContext;
 
   final private AllowanceDbHelper mDbHelper;
-  
+
+  /**
+   * Create a new {@link FinanceManager}
+   *
+   * @param context
+   */
   public FinanceManager(Context context) {
     mAppContext = context.getApplicationContext();
     mDbHelper = new AllowanceDbHelper(mAppContext);
@@ -46,10 +51,21 @@ public class FinanceManager {
     }
   }
 
+  /**
+   * Check your total saved value
+   *
+   * @return the total amount saved from rollovers
+   */
   public double getSavedTotal() {
+    checkForDateSet();
     return mSavingManager.getTotalSavedValue();
   }
 
+  /**
+   * Set the beginning of your cycle
+   *
+   * @param startDate
+   */
   public void setStartDate(Calendar startDate) {
     SharedPreferences sharedPreferences = PreferenceManager
         .getDefaultSharedPreferences(mAppContext);
@@ -60,6 +76,11 @@ public class FinanceManager {
     mCurrentAllowance = mSavingManager.getNewAllowance(mCurrentAllowance);
   }
 
+  /**
+   * Get the beginning of your cycle
+   *
+   * @return
+   */
   public Calendar getStartDate() {
     if (mStartDate == null) {
       SharedPreferences sharedPreferences = PreferenceManager
@@ -76,6 +97,18 @@ public class FinanceManager {
     return mStartDate;
   }
 
+  private void checkForDateSet() {
+    if (getStartDate() == null) {
+      throw new RuntimeException(
+          "You must set the startDate before you can use this FinanceManager");
+    }
+  }
+
+  /**
+   * Get the end of your cycle
+   *
+   * @return
+   */
   public Calendar getEndDate() {
     if (getStartDate() == null) {
       return null;
@@ -85,12 +118,35 @@ public class FinanceManager {
     return endDate;
   }
 
+  /**
+   * Get the amount remaining that you can spend in this cycle
+   *
+   * @return
+   */
   public double getRemaining() {
+    checkForDateSet();
     return mCurrentAllowance.getRemainingAmount();
   }
 
+  /**
+   * Get maximum amount that you're allowed to spend in this cycle
+   *
+   * @return
+   */
+  public double getAllowed() {
+    checkForDateSet();
+    return AllowanceWallet.ALLOWED_TOTAL;
+  }
+
   //region Transactions
+
+  /**
+   * Add a transaction to the ledger. This will update your amount remaining
+   *
+   * @param transaction
+   */
   public void performTransaction(Transaction transaction) {
+    checkForDateSet();
     //save the transaction in the history
     if (mDbHelper.insertTransaction(transaction)) {
       //edit your wallet
@@ -98,13 +154,26 @@ public class FinanceManager {
     }
   }
 
+  /**
+   * Remove a transaction from the ledger. This will update your amount remaining.
+   *
+   * @param transaction
+   */
   public void removeTransaction(Transaction transaction) {
+    checkForDateSet();
     if (mDbHelper.deleteTransaction(transaction)) {
       mCurrentAllowance.deposit(transaction.getAmountUSD());
     }
   }
 
+  /**
+   * Edit a transaction from the ledger. This will update your amount remaining.
+   *
+   * @param originalTransaction
+   * @param newTransaction
+   */
   public void editTransaction(Transaction originalTransaction, Transaction newTransaction) {
+    checkForDateSet();
     if (mDbHelper.deleteTransaction(originalTransaction)) {
       mCurrentAllowance.deposit(originalTransaction.getAmountUSD());
       //save the transaction in the history
@@ -115,7 +184,13 @@ public class FinanceManager {
     }
   }
 
+  /**
+   * Get a list of the past transactions
+   *
+   * @return
+   */
   public List<Transaction> getRecentTransactions() {
+    checkForDateSet();
     return mDbHelper.getTransactionList();
   }
   //endregion
