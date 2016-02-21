@@ -111,7 +111,6 @@ public class FinanceManagerTest extends AndroidTestCase {
     Transaction transaction = new Transaction("title", "desc", initialTxValue, mToday.getTime());
     mFinanceManager.performTransaction(transaction);
 
-
     final double newTxValue = 2.46;
     Transaction newTransaction = new Transaction("title", "desc", newTxValue, mToday.getTime());
 
@@ -129,11 +128,13 @@ public class FinanceManagerTest extends AndroidTestCase {
     assertEquals(expectedRemaining, mFinanceManager.getRemaining());
   }
 
-
-  public void testLoadingFromPreferences(){
+  public void testLoadingFromPreferences() {
 
     final Double expectedSaved = 363.32;
     final Double expectedRemaining = 23.11;
+
+    // reset FinanceManager
+    mFinanceManager = new FinanceManager(getContext());
 
     // fill shared prefs with junk
     SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
@@ -143,16 +144,13 @@ public class FinanceManagerTest extends AndroidTestCase {
         .putString(AllowanceWallet.KEY_REMAINING_ALLOWANCE, expectedRemaining.toString())
         .commit();
 
-    // reset FinanceManager
-    mFinanceManager = new FinanceManager(getContext());
-
     assertEquals(expectedRemaining, mFinanceManager.getRemaining());
     assertEquals(expectedSaved, mFinanceManager.getSavedTotal());
     assertEquals(mToday, mFinanceManager.getStartDate());
 
   }
 
-  public void testSavingToPreferences(){
+  public void testSavingToPreferences() {
     final double txValue = 2.46;
     Transaction tx = new Transaction("title", "desc", txValue, mToday.getTime());
 
@@ -195,6 +193,30 @@ public class FinanceManagerTest extends AndroidTestCase {
     // check to make sure allowance is correct
     final double expectedRemaining = AllowanceWallet.ALLOWED_TOTAL - newTxValue;
     assertEquals(expectedRemaining, Double.parseDouble(remaining));
+  }
+
+  public void testExpired() throws Exception {
+    // manual teardown because setUp doesn't cover this case
+    tearDown();
+
+    Calendar past = Calendar.getInstance();
+    past.add(Calendar.DAY_OF_YEAR, -29);
+
+    mFinanceManager = new FinanceManager(getContext());
+    mFinanceManager.setStartDate(past);
+
+    // creating a new finance manager should result in 2 roll overs
+    mFinanceManager = new FinanceManager(getContext());
+
+    // check rollover values
+    final Double expectedSaving = AllowanceWallet.ALLOWED_TOTAL * 2;
+    assertEquals(expectedSaving, mFinanceManager.getSavedTotal());
+
+    // check rollover dates
+    Calendar newExpectedStartDate = Calendar.getInstance();
+    newExpectedStartDate.add(Calendar.DAY_OF_YEAR, -1);
+
+    assertEquals(newExpectedStartDate, mFinanceManager.getStartDate());
   }
 
 

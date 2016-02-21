@@ -46,11 +46,9 @@ public class SavingManager {
     if (allowanceWallet != null) {
       Double newSavedValue = getTotalSavedValue() + allowanceWallet.getRemainingAmount();
       setTotalSavedValue(newSavedValue);
+      return AllowanceWallet.exchange(allowanceWallet);
+    } else {
+      return AllowanceWallet.create(mAppContext);
     }
-    return AllowanceWallet.exchange(allowanceWallet);
-  }
-
-  public AllowanceWallet getAllowanceWallet(){
-    return AllowanceWallet.create(mAppContext);
   }
 }

@@ -24,12 +24,26 @@ public class FinanceManager {
   final Context mAppContext;
 
   final private AllowanceDbHelper mDbHelper;
-
+  
   public FinanceManager(Context context) {
     mAppContext = context.getApplicationContext();
     mDbHelper = new AllowanceDbHelper(mAppContext);
     mSavingManager = new SavingManager(mAppContext);
-    mCurrentAllowance = mSavingManager.getAllowanceWallet();
+    if (getStartDate() != null) {
+      // only get a wallet if a startDate was set
+      // if a start date isn't set, we'll get a new wallet when it does get set
+      mCurrentAllowance = mSavingManager.getNewAllowance(null);
+    }
+
+    handleExpired();
+  }
+
+  private void handleExpired() {
+    Calendar endDate = getEndDate();
+    while (endDate != null && endDate.before(Calendar.getInstance())) {
+      setStartDate(endDate);
+      endDate = getEndDate();
+    }
   }
 
   public double getSavedTotal() {
