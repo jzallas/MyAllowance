@@ -14,7 +14,7 @@ import allowance.fps.com.myallowance.R;
 
 public class AccountReviewFragment extends Fragment {
 
-    FinanceManager mFinanceManager = null;
+    private FinanceManager mFinanceManager = null;
 
     private TextView expectedSpendingText;
 
