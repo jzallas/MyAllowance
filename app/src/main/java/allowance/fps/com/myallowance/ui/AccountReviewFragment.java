@@ -1,4 +1,4 @@
-package allowance.fps.com.myallowance;
+package allowance.fps.com.myallowance.ui;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -9,8 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import allowance.fps.com.myallowance.FinanceManager;
+import allowance.fps.com.myallowance.R;
+
 public class AccountReviewFragment extends Fragment {
 
+    FinanceManager mFinanceManager = null;
 
     private TextView expectedSpendingText;
 
@@ -24,6 +28,12 @@ public class AccountReviewFragment extends Fragment {
 
     public static AccountReviewFragment newInstance() {
         return new AccountReviewFragment();
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mFinanceManager = new FinanceManager(getActivity());
     }
 
     @Nullable
