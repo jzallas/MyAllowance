@@ -7,20 +7,22 @@
         android:layout_height="match_parent"
         android:background="#f7f3f3">
 
-
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
         <TextView
+                android:id="@+id/today_date"
                 android:text="Feburary 1, 2015"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:textSize="22sp"
                 android:gravity="center"/>
+
         <TextView
+                android:id="@+id/budget_timeline"
                 android:text="Budget week ends on Feb 14, 2015"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -35,7 +37,7 @@
                 android:orientation="horizontal">
 
             <TextView
-                    android:id="@+id/account_review_start"
+                    android:id="@+id/account_review_spent"
                     android:text="0"
                     android:padding="16dp"
                     android:layout_gravity="center_vertical"
@@ -112,7 +114,6 @@
 
                 <TextView
                         style="@style/TextAppearance.AppCompat.Body2"
-                        android:id="@+id/account_review_actual_spending_value"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="16dp"
@@ -126,6 +127,38 @@
                       android:layout_gravity="center"/>
 
                 <TextView
+                        android:id="@+id/account_review_actual_spending_value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:padding="16dp"
+                        android:layout_gravity="center_vertical"
+                        android:text="$250"/>
+            </LinearLayout>
+
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                <TextView
+                        style="@style/TextAppearance.AppCompat.Body2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:textColor="@android:color/holo_green_light"
+                        android:layout_gravity="center_vertical"
+                        android:text="Remaining"/>
+
+                <View android:layout_width="0dp"
+                      android:layout_height="1dp"
+                      android:layout_weight="1"
+                      android:background="#d2d2d2"
+                      android:layout_gravity="center"/>
+
+                <TextView
+                        android:id="@+id/account_review_remaining"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textStyle="bold"
@@ -138,11 +171,11 @@
         </LinearLayout>
 
         <LinearLayout
-                android:id="@+id/account_review_recent_spending"
+                android:id="@+id/account_review_recent_transactions"
                 android:layout_width="match_parent"
                 android:orientation="vertical"
-                android:layout_height="wrap_content"
-                android:background="@android:color/holo_red_light"/>
+                android:layout_marginTop="20dp"
+                android:layout_height="wrap_content"/>
 
     </LinearLayout>
 

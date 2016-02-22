@@ -3,56 +3,62 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="64dp">
-
-    <ImageView
-            android:id="@+id/transaction_icon"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_margin="8dp"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"/>
-
+        android:layout_height="64dp"
+        android:background="@android:color/white">
 
     <TextView
             android:id="@+id/transaction_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/transaction_icon"
             android:layout_centerVertical="true"
             android:layout_marginRight="8dp"
+            android:paddingLeft="16dp"
             android:textColor="@android:color/black"
             android:text="1/25/2016"/>
 
 
     <LinearLayout
+            android:id="@+id/transactions_text_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@id/transaction_date"
-            android:orientation="vertical">
+            android:layout_toRightOf="@+id/transaction_date"
+            android:orientation="vertical"
+            android:layout_toLeftOf="@+id/transaction_amount"
+            android:layout_toStartOf="@+id/transaction_amount">
         <TextView
                 android:id="@+id/transaction_title"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:lines="1"
                 android:text="Spending"
                 android:textSize="16sp"/>
         <TextView
                 android:id="@+id/transaction_note"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:lines="1"
+                android:ellipsize="end"
                 android:text="This is a note"/>
 
     </LinearLayout>
 
     <TextView
-            android:id="@+id/amount"
+            android:id="@+id/transaction_amount"
             android:text="$134"
             android:layout_centerVertical="true"
             android:layout_width="wrap_content"
-            android:padding="16dp"
             android:layout_alignParentRight="true"
+            android:paddingRight="16dp"
             android:textColor="@android:color/holo_red_light"
             android:layout_height="wrap_content"/>
+
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="16dp"
+            android:background="#d2d2d2"
+            android:layout_below="@id/transactions_text_container"/>
 
 </RelativeLayout>

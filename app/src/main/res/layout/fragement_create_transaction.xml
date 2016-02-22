@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:padding="16dp"
+        android:layout_height="match_parent">
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+        <EditText
+                android:id="@+id/input_title"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:layout_marginRight="8dp"
+                android:hint="Title"/>
+
+        <EditText
+                android:id="@+id/input_amount"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:hint="Amount"
+                android:inputType="numberSigned"/>
+
+    </LinearLayout>
+
+    <EditText
+            android:id="@+id/input_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="64dp"
+            android:inputType="text"
+            android:hint="Description"/>
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:gravity="bottom"
+            android:layout_height="64dp">
+
+        <Button
+                android:id="@+id/cancel_btn"
+                android:text="Cancel"
+                android:layout_width="100dp"
+                android:layout_height="48dp"
+                android:layout_toLeftOf="@+id/next_btn"/>
+
+        <Button
+                android:id="@+id/next_btn"
+                android:text="Next"
+                android:layout_width="100dp"
+                android:layout_height="48dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"/>
+
+    </RelativeLayout>
+
+</LinearLayout>
