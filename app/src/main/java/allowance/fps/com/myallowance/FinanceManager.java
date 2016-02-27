@@ -37,7 +37,7 @@ public class FinanceManager {
     if (getStartDate() != null) {
       // only get a wallet if a startDate was set
       // if a start date isn't set, we'll get a new wallet when it does get set
-      mCurrentAllowance = mSavingManager.getNewAllowance(null);
+      mCurrentAllowance = mSavingManager.getNewAllowance(mCurrentAllowance);
     }
 
     handleExpired();

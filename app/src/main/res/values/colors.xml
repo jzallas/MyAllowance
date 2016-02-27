@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <color name="dark_blue">#0D2C54</color>
+    <color name="money_green">#7FB800</color>
+    <color name="sky_blue">#00A6ED</color>
+    <color name="caution">#FFB400</color>
+    <color name="dark_gray">#4b4b4b</color>
+    <color name="error">#f6241d</color>
+</resources>

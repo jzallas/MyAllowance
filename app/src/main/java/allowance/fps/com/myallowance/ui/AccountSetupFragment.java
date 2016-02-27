@@ -1,6 +1,7 @@
 package allowance.fps.com.myallowance.ui;
 
 import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Switch;
 
@@ -30,6 +32,12 @@ public class AccountSetupFragment extends Fragment {
 
     private Switch mTodaySwitch;
 
+    private int mSelectedYear;
+
+    private int mSelectedMonth;
+
+    private int mSelectedDay;
+
     public static AccountSetupFragment newInstance() {
         return new AccountSetupFragment();
     }
@@ -49,6 +57,17 @@ public class AccountSetupFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (validateInputs()) {
+
+                    if (mTodaySwitch.isChecked()) {
+                        mFinanceManager.setStartDate(Calendar.getInstance());
+                    } else {
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.set(mSelectedYear,
+                                mSelectedMonth,
+                                mSelectedDay);
+                        mFinanceManager.setStartDate(calendar);
+                    }
+
                     getActivity().getFragmentManager()
                             .beginTransaction()
                             .add(R.id.container, AccountReviewFragment.newInstance())
@@ -59,6 +78,38 @@ public class AccountSetupFragment extends Fragment {
             }
         });
 
+        mInputStartDay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final int currentmonth = Calendar.getInstance().get(Calendar.MONTH);
+                final int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+                final int currentDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+                DatePickerDialog dialog = new DatePickerDialog(
+                        getActivity(),
+                        new DatePickerDialog.OnDateSetListener() {
+                            @SuppressLint("DefaultLocale")
+                            @Override
+                            public void onDateSet(DatePicker view,
+                                    int year,
+                                    int monthOfYear,
+                                    int dayOfMonth) {
+                                mTodaySwitch.setChecked(false);
+                                mSelectedYear = year;
+                                mSelectedMonth = monthOfYear;
+                                mSelectedDay = dayOfMonth;
+                                mInputStartDay.setText(
+                                        String.format("%d/%d/%d",
+                                                monthOfYear + 1,
+                                                dayOfMonth,
+                                                year));
+                            }
+                        },
+                        currentYear,
+                        currentmonth,
+                        currentDay);
+                dialog.show();
+            }
+        });
         mTodaySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @SuppressLint("DefaultLocale")
             @Override
@@ -67,7 +118,6 @@ public class AccountSetupFragment extends Fragment {
                     int month = Calendar.getInstance().get(Calendar.MONTH) + 1;
                     int year = Calendar.getInstance().get(Calendar.YEAR);
                     int day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
-                    mFinanceManager.setStartDate(Calendar.getInstance());
                     mInputStartDay.setText(String.format("%d/%d/%d", month, day, year));
                 }
             }

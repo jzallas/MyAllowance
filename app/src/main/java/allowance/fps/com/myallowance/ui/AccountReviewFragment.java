@@ -14,7 +14,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.Calendar;
-import java.util.Date;
 
 import allowance.fps.com.myallowance.FinanceManager;
 import allowance.fps.com.myallowance.R;
@@ -49,6 +48,10 @@ public class AccountReviewFragment extends Fragment implements
 
     private TextView mRemainingBudget;
 
+    private TextView mTotalSaved;
+
+    private CreateTransactionDialogFragment mCreateTransactionDialogFragment;
+
     public static AccountReviewFragment newInstance() {
         return new AccountReviewFragment();
     }
@@ -69,9 +72,10 @@ public class AccountReviewFragment extends Fragment implements
         mActualSpendingText = (TextView) rootview
                 .findViewById(R.id.account_review_actual_spending_value);
         mBudgetSpent = (TextView) rootview.findViewById(R.id.account_review_spent);
-        mRemainingBudget= (TextView) rootview.findViewById(R.id.account_review_remaining);
+        mRemainingBudget = (TextView) rootview.findViewById(R.id.account_review_remaining);
         mBudgetEndAmount = (TextView) rootview.findViewById(R.id.account_review_goal);
         mBudgetDuration = (TextView) rootview.findViewById(R.id.budget_timeline);
+        mTotalSaved= (TextView) rootview.findViewById(R.id.account_review_total);
         mTodayDate = (TextView) rootview.findViewById(R.id.today_date);
         mAddTransactionsFab = (FloatingActionButton) rootview
                 .findViewById(R.id.add_transaction_fab);
@@ -106,7 +110,12 @@ public class AccountReviewFragment extends Fragment implements
         month = endDateCal.get(Calendar.MONTH) + 1;
         year = endDateCal.get(Calendar.YEAR);
         day = endDateCal.get(Calendar.DAY_OF_MONTH);
-        mBudgetDuration.setText("Budget ends on " + String.format("%d/%d/%d", month, day, year));
+
+        mBudgetDuration.setText("Budget starts on " + String.format("%d/%d/%d",
+                mFinanceManager.getStartDate().get(Calendar.MONTH) + 1,
+                mFinanceManager.getStartDate().get(Calendar.DAY_OF_MONTH),
+                mFinanceManager.getStartDate().get(Calendar.YEAR))
+                + "\nends on " + String.format("%d/%d/%d", month, day, year));
     }
 
     @SuppressLint("DefaultLocale")
@@ -116,11 +125,13 @@ public class AccountReviewFragment extends Fragment implements
         mBudgetEndAmount.setText(getMoney(mFinanceManager.getAllowed()));
         mRemainingBudget.setText(getMoney(mFinanceManager.getRemaining()));
 
-        int progress = (int) ((actualSpending * 100)/mFinanceManager.getAllowed());
+        int progress = (int) ((actualSpending * 100) / mFinanceManager.getAllowed());
         mProgressBar.setProgress(progress);
 
         mExpectedSpendingText.setText(getMoney(mFinanceManager.getAllowed()));
         mActualSpendingText.setText(getMoney(actualSpending));
+
+        mTotalSaved.setText(getMoney(mFinanceManager.getSavedTotal()));
     }
 
     private void initRecentTransactions() {
@@ -145,21 +156,24 @@ public class AccountReviewFragment extends Fragment implements
     }
 
     private void showCreateTransactionDialog() {
-        CreateTransactionDialogFragment dialogFragment = CreateTransactionDialogFragment
+        mCreateTransactionDialogFragment = CreateTransactionDialogFragment
                 .newInstance();
-        dialogFragment.setListener(this);
-        dialogFragment.show(getActivity().getFragmentManager(),
+        mCreateTransactionDialogFragment.setListener(this);
+        mCreateTransactionDialogFragment.show(getActivity().getFragmentManager(),
                 AccountReviewFragment.class.getSimpleName());
     }
 
     @Override
-    public void createTransaction(String title, String description, Double amount, Date time) {
+    public void createTransaction(String title, String description, Double amount, Calendar time) {
         Log.v("eee", "Callback to controller: createTransaction");
+        if(mCreateTransactionDialogFragment!=null){
+            mCreateTransactionDialogFragment.dismiss();
+        }
         Transaction transaction = new Transaction(
                 title,
                 description,
                 amount,
-                time);
+                time.getTime());
         mFinanceManager.performTransaction(transaction);
         refreshView();
     }

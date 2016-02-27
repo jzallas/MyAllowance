@@ -1,5 +1,7 @@
 package allowance.fps.com.myallowance.ui;
 
+import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.os.Bundle;
@@ -8,10 +10,10 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
 import android.widget.EditText;
 
 import java.util.Calendar;
-import java.util.Date;
 
 import allowance.fps.com.myallowance.R;
 
@@ -24,6 +26,14 @@ public class CreateTransactionDialogFragment extends DialogFragment {
     private EditText mAmount;
 
     private TransactionListener mListener;
+
+    private EditText mDate;
+
+    private int mSelectedYear;
+
+    private int mSelectedMonth;
+
+    private int mSelectedDay;
 
     public void setListener(
             TransactionListener listener) {
@@ -41,6 +51,7 @@ public class CreateTransactionDialogFragment extends DialogFragment {
         View rootview = inflater.inflate(R.layout.fragement_create_transaction, container, false);
         mAmount = (EditText) rootview.findViewById(R.id.input_amount);
         mTitle = (EditText) rootview.findViewById(R.id.input_title);
+        mDate = (EditText) rootview.findViewById(R.id.input_date);
         mDescription = (EditText) rootview.findViewById(R.id.input_description);
 
         rootview.findViewById(R.id.next_btn).setOnClickListener(new View.OnClickListener() {
@@ -48,11 +59,15 @@ public class CreateTransactionDialogFragment extends DialogFragment {
             public void onClick(View v) {
                 if (validateTitle() && validteAmount()) {
                     if (mListener != null) {
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.set(mSelectedYear,
+                                mSelectedMonth,
+                                mSelectedDay);
                         mListener.createTransaction(
                                 mTitle.getEditableText().toString(),
                                 mDescription.getEditableText().toString(),
                                 Double.parseDouble(mAmount.getEditableText().toString()),
-                                Calendar.getInstance().getTime());
+                                calendar);
                     }
                 }
             }
@@ -62,6 +77,35 @@ public class CreateTransactionDialogFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 dismiss();
+            }
+        });
+
+        mDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final int currentmonth = Calendar.getInstance().get(Calendar.MONTH);
+                final int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+                final int currentDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+                DatePickerDialog dialog = new DatePickerDialog(getActivity(),
+                        new DatePickerDialog.OnDateSetListener() {
+                            @SuppressLint("DefaultLocale")
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                    int dayOfMonth) {
+                                mSelectedYear = year;
+                                mSelectedMonth = monthOfYear;
+                                mSelectedDay = dayOfMonth;
+                                mDate.setText(
+                                        String.format("%d/%d/%d",
+                                                monthOfYear + 1,
+                                                dayOfMonth,
+                                                year));
+                            }
+                        },
+                        currentYear,
+                        currentmonth,
+                        currentDay);
+                dialog.show();
             }
         });
         return rootview;
@@ -95,6 +139,6 @@ public class CreateTransactionDialogFragment extends DialogFragment {
 
     public interface TransactionListener {
 
-        void createTransaction(String title, String description, Double amount, Date time);
+        void createTransaction(String title, String description, Double amount, Calendar time);
     }
 }
